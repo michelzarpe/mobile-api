@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.appsdeveloperblog.app.ws.exeptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.model.dto.UpdateUserDetailsDTO;
 import com.appsdeveloperblog.app.ws.model.dto.UserDTO;
 import com.appsdeveloperblog.app.ws.model.dto.UserDetailsDTO;
@@ -44,6 +45,8 @@ public class UserController {
 			produces = {MediaType.APPLICATION_XML_VALUE, 
 			            MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<UserDTO> getUser(@PathVariable String userId){
+		
+		if(true) throw new UserServiceException("A user Service exception is throw");
 		
 		if(users.containsKey(userId)) {
 			return ResponseEntity.ok(users.get(userId));
