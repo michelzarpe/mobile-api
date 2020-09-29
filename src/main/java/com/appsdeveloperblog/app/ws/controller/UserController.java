@@ -2,10 +2,10 @@ package com.appsdeveloperblog.app.ws.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appsdeveloperblog.app.ws.exeptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.model.dto.UpdateUserDetailsDTO;
 import com.appsdeveloperblog.app.ws.model.dto.UserDTO;
 import com.appsdeveloperblog.app.ws.model.dto.UserDetailsDTO;
 import com.appsdeveloperblog.app.ws.response.Response;
+import com.appsdeveloperblog.app.ws.service.UserService;
 
 
 @RestController
 @RequestMapping("users") // http://localhost:8080/users
 public class UserController {
+	@Autowired
+	UserService userService;
+	
 	Map<String, UserDTO> users;
 	
 	@GetMapping()
@@ -46,7 +49,7 @@ public class UserController {
 			            MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<UserDTO> getUser(@PathVariable String userId){
 		
-		if(true) throw new UserServiceException("A user Service exception is throw");
+		//if(true) throw new UserServiceException("A user Service exception is throw");
 		
 		if(users.containsKey(userId)) {
 			return ResponseEntity.ok(users.get(userId));
@@ -66,10 +69,9 @@ public class UserController {
 			result.getAllErrors().forEach(e -> response.getErrors().add(e.getDefaultMessage()));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
-		String userId = UUID.randomUUID().toString();
-		UserDTO userDTO = new UserDTO(userDetailsDTO.getFirstName(), userDetailsDTO.getLastName(), userDetailsDTO.getEmail(), userId); 
-		if(users == null) users = new HashMap<>();
-		users.put(userId, userDTO);
+		
+		UserDTO userDTO = userService.createUser(userDetailsDTO);
+		
 		response.setData(userDTO);
 		return ResponseEntity.ok(response);
 	}
