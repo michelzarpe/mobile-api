@@ -1,10 +1,3 @@
-# SpringCloudVideoCourse
-![Screenshot](Architecture.png)
-![Screenshot](Architecture_1.png)
-
-# Sample Microservices
-![Screenshot](sample_microservices_architecture.png)
-
 ### REST User 
 1. **POST** /users
 2. **GET** /user/1 or /user
